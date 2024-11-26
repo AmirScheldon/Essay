@@ -1,39 +1,39 @@
-"""Welcome to Reflex! This file outlines the steps to create a basic app."""
-
 import reflex as rx
 
 from rxconfig import config
+from .ui.base import base_page
 
 
+from . import navigations
+from .pages import about, contact
 class State(rx.State):
-    """The app state."""
+    label = 'Label one'
+    
+    def on_change_function(self, val):
+        self.label = val
+        
+    def on_click_function(self):
+        print('clicked!')
 
-    ...
 
-
+@rx.page(route= navigations.routes.HOME_ROUTE)
 def index() -> rx.Component:
-    # Welcome Page (Index)
-    return rx.container(
-        rx.color_mode.button(position="top-left"),
-        rx.vstack(
-            rx.heading("Welcome to Reflex!", size="9"),
-            rx.text(
-                "Get started by editing ",
-                rx.code(f"{config.app_name}/{config.app_name}.py"),
-                size="5",
-            ),
-            rx.link(
-                rx.button("Check out our docs!"),
-                href="https://reflex.dev/docs/getting-started/introduction/",
-                is_external=True,
-            ),
+    
+    child = rx.vstack(
+            # vertical stack
+            rx.heading(State.label, size= '9', align= 'center'),
+            rx.link(rx.button('About US'), href= navigations.routes.ABOUT_US_ROUTE),
             spacing="5",
             justify="center",
+            align = 'center',
             min_height="85vh",
-        ),
-        rx.logo(),
-    )
-
-
+            id = 'child_id'
+        )
+    
+    return base_page(      
+            child)
+    
 app = rx.App()
-app.add_page(index)
+app.add_page(contact.contact)
+
+
