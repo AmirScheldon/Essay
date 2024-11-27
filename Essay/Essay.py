@@ -1,11 +1,9 @@
 import reflex as rx
-
-from rxconfig import config
 from .ui.base import base_page
 
 
 from . import navigations
-from .pages import about, contact
+from .contact import page
 class State(rx.State):
     label = 'Label one'
     
@@ -34,6 +32,6 @@ def index() -> rx.Component:
             child)
     
 app = rx.App()
-app.add_page(contact.contact)
+app.add_page(page.contact_page(), route= navigations.routes.CONTACT_ROUTE)
 
 
