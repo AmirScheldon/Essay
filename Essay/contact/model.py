@@ -1,11 +1,11 @@
 import reflex as rx
 from sqlmodel import Field
-from datetime import datetime, timezone
+from datetime import datetime
+from ..utils.timing import get_utc_now 
 
 import sqlalchemy
 
-def get_utc_now() -> datetime:
-    return datetime.now(timezone.utc)
+
 
 class ContactDataModel(rx.Model, table=True):
     first_name: str

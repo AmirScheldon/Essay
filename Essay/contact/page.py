@@ -2,8 +2,27 @@ import reflex as rx
 from ..ui.base import base_page
 from .state import ContactState
 from .form import contact_form
+from . import model
 
+def contact_list_item(contact: model.ContactDataModel):
+    return rx.box(
+        rx.heading(contact.first_name),
+        rx.text(contact.text),
+        padding='1em'
+        )
 
+def contact_list_page() -> rx.Component:
+    return base_page(
+        rx.vstack(
+            # vertical stack
+            rx.heading('Contact List', size= '5'),
+            rx.foreach(ContactState.enteries, contact_list_item),
+            spacing="5",
+            align = 'center',
+            min_height="85vh"
+        )
+    )
+    
 
 def contact_page() -> rx.Component:
     my_form =contact_form()
