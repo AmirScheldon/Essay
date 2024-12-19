@@ -1,22 +1,18 @@
-import reflex as rx
-from ..ui.base import base_page
-from .. import navigations
+import reflex as rx 
 
-@rx.page(route= navigations.routes.ABOUT_US_ROUTE)
-def about() -> rx.Component:
-    
-    child = rx.vstack(
-            # vertical stack
-            rx.heading('About Us', size= '9', align= 'center'),
+from ..ui.base import base_page
+
+# @rx.page(route='/about')
+def about_page() -> rx.Component:
+    my_child = rx.vstack(
+            rx.heading("About ME", size="9"),
+            rx.text(
+                "Something cool about us.",
+            ),
             spacing="5",
             justify="center",
-            align = 'center',
+            align="center",
             min_height="85vh",
-            id = 'about'
+            id='my-child'
         )
-    
-    return base_page(      
-            child)
-    
-app = rx.App()
-app.add_page(about)
+    return base_page(my_child)

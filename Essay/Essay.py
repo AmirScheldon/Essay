@@ -1,13 +1,15 @@
 import reflex as rx
 from .ui.base import base_page
+import reflex_local_auth
 
+from .auth.pages import (
+    my_login_page,
+    my_register_page,
 
-from . import navigations
-from .contact import state as state_contact
-from .contact import page as page_contact
-from .blog import list as blog_list
-from .blog import state as blog_state
-from .blog import add_page
+)
+from .auth.state import SessionState
+from . import navigation
+from . import blog, contact, navigation, pages
 
 class State(rx.State):
     label = 'Label one'
@@ -19,13 +21,13 @@ class State(rx.State):
         print('clicked!')
 
 
-@rx.page(route= navigations.routes.HOME_ROUTE)
+@rx.page(route= navigation.routes.HOME_ROUTE)
 def index() -> rx.Component:
     
     child = rx.vstack(
             # vertical stack
             rx.heading(State.label, size= '9', align= 'center'),
-            rx.link(rx.button('About US'), href= navigations.routes.ABOUT_US_ROUTE),
+            rx.link(rx.button('About Me'), href= navigation.routes.ABOUT_US_ROUTE),
             spacing="5",
             justify="center",
             align = 'center',
@@ -37,13 +39,52 @@ def index() -> rx.Component:
             child)
     
 app = rx.App()
-app.add_page(page_contact.contact_page, route=navigations.routes.CONTACT_ROUTE)
-app.add_page(page_contact.contact_list_page, 
-             route=navigations.routes.CONTACT_ENTERIES_ROUTE,
-             on_load=state_contact.ContactState.contact_list_entries)
-app.add_page(add_page.blog_add_post_page, route=navigations.routes.BLOG_ADD_ROUTE)
-app.add_page(blog_list.blog_post_list_page, 
-             route= navigations.routes.BLOG_POSTS_ROUTE,
-             on_load= blog_state.BLogPostState.load_posts)
 
+# reflex_local_auth pages
+app.add_page(
+    my_login_page,
+    route=reflex_local_auth.routes.LOGIN_ROUTE,
+    title="Login",
+)
+app.add_page(
+    my_register_page,
+    route=reflex_local_auth.routes.REGISTER_ROUTE,
+    title="Register",
+)
+
+# my pages
+app.add_page(pages.about_page, 
+             route=navigation.routes.ABOUT_US_ROUTE)
+
+app.add_page(
+    blog.blog_post_list_page, 
+    route=navigation.routes.BLOG_POSTS_ROUTE,
+    on_load=blog.BlogPostState.load_posts
+    
+)
+
+app.add_page(
+    blog.blog_post_add_page, 
+    route=navigation.routes.BLOG_POST_ADD_ROUTE
+)
+
+app.add_page(
+    blog.blog_post_detail_page, 
+    route="/blog/[blog_id]",
+    on_load=blog.BlogPostState.get_post_detail
+)
+
+app.add_page(
+    blog.blog_post_edit_page, 
+    route="/blog/[blog_id]/edit",
+    on_load=blog.BlogPostState.get_post_detail
+)
+
+app.add_page(contact.contact_page, 
+             route=navigation.routes.CONTACT_US_ROUTE)
+app.add_page(
+    contact.contact_entries_list_page, 
+    route=navigation.routes.CONTACT_ENTRIES_ROUTE,
+    on_load=contact.ContactState.list_entries
+)
 

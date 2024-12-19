@@ -1,7 +1,8 @@
-from . import about, contact
+from .about import about_page
 
 
-__all__ = [
-    'about',
-    'contact'
+
+
+__all__ = [ 
+    'about_page',
 ]
