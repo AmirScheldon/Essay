@@ -81,11 +81,11 @@ class BlogPostState(SessionState):
     def add_post(self, form_data:dict):
         with rx.session() as session:
             post = BlogPostModel(**form_data)
-            # print("adding", post)
+
             session.add(post)
             session.commit()
             session.refresh(post) # post.id
-            # print("added", post)
+
             self.post = post
 
     def save_post_edits(self, post_id:int, updated_data:dict):

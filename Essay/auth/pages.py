@@ -38,3 +38,30 @@ def my_register_page()->rx.Component:
     )
 
 
+def my_logout_page() -> rx.Component: 
+    child = rx.vstack(
+            # vertical stack
+            rx.heading('Do you want to logou?', size= '9', align= 'center'),
+            rx.link(
+                rx.button(
+                    'Yes, logout',
+                    on_click=SessionState.my_logout 
+                )
+            ),
+            rx.link(
+                rx.button(
+                    'No',
+                    color_scheme= 'gray'
+                ),
+                href=navigation.routes.HOME_ROUTE
+            ),
+            spacing="5",
+            justify="center",
+            align = 'center',
+            min_height="85vh",
+            id = 'child_id'
+        )
+    
+    return base_page(      
+            child)
+

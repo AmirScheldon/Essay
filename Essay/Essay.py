@@ -5,9 +5,9 @@ import reflex_local_auth
 from .auth.pages import (
     my_login_page,
     my_register_page,
-
+    my_logout_page
 )
-from .auth.state import SessionState
+
 from . import navigation
 from . import blog, contact, navigation, pages
 
@@ -53,6 +53,12 @@ app.add_page(
 )
 
 # my pages
+app.add_page(
+    my_logout_page,
+    route=navigation.routes.LOGOUT_ROUTE,
+    title="Logout",
+)
+
 app.add_page(pages.about_page, 
              route=navigation.routes.ABOUT_US_ROUTE)
 
