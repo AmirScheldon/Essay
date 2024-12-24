@@ -15,7 +15,4 @@ def base_dashboard_page(child: rx.Component) -> rx.Component:
             ),
             
         ),
-        # rx.color_mode.button(position="bottom-left"),
-        # padding='10em',
-        # id="my-base-container"
     )

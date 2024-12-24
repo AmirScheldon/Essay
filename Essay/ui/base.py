@@ -15,8 +15,6 @@ def base_layout_component(child) -> rx.Component:
             id="my-content-area-el"
         ),
         rx.color_mode.button(position="bottom-left"),
-        # padding='10em',
-        # id="my-base-container"
     )
 
 def base_page(child: rx.Component) -> rx.Component:

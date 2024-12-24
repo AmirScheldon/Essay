@@ -10,6 +10,12 @@ from ..models import UserInfo
 class SessionState(reflex_local_auth.LocalAuthState):
     
     @rx.var(cache=True)
+    def my_user_id(self) -> int | None:
+        if self.authenticated_user.id < 0:
+            return None
+        return self.authenticated_user.id 
+    
+    @rx.var(cache=True)
     def authenticated_username(self) -> str | None:
         if self.authenticated_user.id < 0:
             return None
@@ -28,8 +34,8 @@ class SessionState(reflex_local_auth.LocalAuthState):
                 ).one_or_none()
                 if result is None:
                     return None
-                print(result)
                 return result
+            
         except Exception as e:
             print(f'an error occured:\n {e}')
             return None
@@ -55,7 +61,6 @@ class MyRegisterState(reflex_local_auth.RegistrationState):
         )
         if validation_errors:
             self.new_user_id = -1
-            print('smt')
             return validation_errors
         self._register_user(username, password)
         return self.new_user_id

@@ -13,6 +13,7 @@ def blog_post_detail_link(child: rx.Component, post: BlogPostModel):
         return rx.fragment(child)
     root_path = navigation.routes.BLOG_POSTS_ROUTE
     post_detail_url = f"{root_path}/{post_id}"
+
     return rx.link(
         child,
         rx.heading("by ", post.userinfo.email),
@@ -20,10 +21,10 @@ def blog_post_detail_link(child: rx.Component, post: BlogPostModel):
     )
 
 def blog_post_list_item(post: BlogPostModel):
+
     return rx.box(
         blog_post_detail_link(
             rx.heading(post.title),
-            
             post
         ),
         padding='1em'
@@ -38,10 +39,9 @@ def blog_post_list_page() ->rx.Component:
                 rx.button("New Post"),
                 href=navigation.routes.BLOG_POST_ADD_ROUTE
             ),
-            # rx.foreach(["abc", "abc", "cde"], foreach_callback),
             rx.foreach(state.BlogPostState.posts, blog_post_list_item),
             spacing="5",
             align="center",
             min_height="85vh",
-        )
+        ),
     ) 

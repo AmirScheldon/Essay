@@ -13,14 +13,10 @@ def contact_entry_list_item(contact: ContactEntryModel):
         padding='1em'
     )
 
-# def foreach_callback(text):
-#     return rx.box(rx.text(text))
-
 def contact_entries_list_page() ->rx.Component:
     return base_page(
         rx.vstack(
             rx.heading("Contact Entries", size="5"),
-            # rx.foreach(["abc", "abc", "cde"], foreach_callback),
             rx.foreach(state.ContactState.entries, contact_entry_list_item),
             spacing="5",
             align="center",
