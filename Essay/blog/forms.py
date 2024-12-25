@@ -39,6 +39,7 @@ def blog_post_add_form() -> rx.Component:
 def blog_post_edit_form() -> rx.Component:
     post = BlogEditFormState.post
     title = post.title
+    publish_active = post.publish_active
     post_content = BlogEditFormState.post_content
     return rx.form(
             rx.box(

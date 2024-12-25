@@ -10,11 +10,10 @@ from .auth.pages import (
 
 from . import navigation
 from . import blog, contact, navigation, pages
-from .articles.list import article_public_list_page
+from .articles.list import article_public_list_page, article_public_lsit_component
 from .articles.state import ArticlePublicState
 from .articles.detail import article_detail_page
 from .auth.state import SessionState 
-
 
 @rx.page(route= navigation.routes.HOME_ROUTE)
 def index() -> rx.Component:
@@ -90,15 +89,8 @@ app.add_page(
     on_load=blog.BlogPostState.get_post_detail
 )
 
-app.add_page(
-    blog.my_delete_page,
-    route="/blog/[blog_id]/delete",
-    on_load=blog.BlogPostState.get_post_detail
-)
-
 app.add_page(contact.contact_page, 
              route=navigation.routes.CONTACT_US_ROUTE)
-
 app.add_page(
     contact.contact_entries_list_page, 
     route=navigation.routes.CONTACT_ENTRIES_ROUTE,
