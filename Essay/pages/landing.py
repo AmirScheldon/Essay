@@ -7,9 +7,9 @@ def landing_component() -> rx.Component:
     return  rx.vstack(
             rx.heading('Welcome to Essay', size= '9', align= 'center'),
             rx.link(rx.button('About Me'), href= navigation.routes.ABOUT_US_ROUTE),
-            article_public_lsit_component(columns=1, limit=1),
-            rx.divider(),
             rx.heading('Recent Articles', size= '4', align= 'center'),
+            rx.divider(),
+            article_public_lsit_component(columns=1, limit=1),
             spacing="5",
             justify="center",
             align = 'center',

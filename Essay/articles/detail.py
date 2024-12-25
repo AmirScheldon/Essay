@@ -1,7 +1,7 @@
 import reflex as rx 
 
 from ..ui.base import base_page
-from ..blog.notfound import blog_post_not_found
+from ..blog.pages import blog_post_not_found
 
 from . import state
 # @rx.page(route='/about')

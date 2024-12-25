@@ -41,7 +41,7 @@ def my_register_page()->rx.Component:
 def my_logout_page() -> rx.Component: 
     child = rx.vstack(
             # vertical stack
-            rx.heading('Do you want to logou?', size= '9', align= 'center'),
+            rx.heading('Do you want to logout?', size= '9', align= 'center'),
             rx.link(
                 rx.button(
                     'Yes, logout',
