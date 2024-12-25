@@ -34,15 +34,21 @@ class BlogPostState(SessionState):
         if not self.post:
             return f"{BLOG_POSTS_ROUTE}"
         return f"{BLOG_POSTS_ROUTE}/{self.post.id}/edit"
+    
+    @rx.var
+    def blog_post_delete_url(self) -> str:
+        if not self.post:
+            return f"{BLOG_POSTS_ROUTE}"
+        return f"{BLOG_POSTS_ROUTE}/{self.post.id}/delete"
 
     def get_post_detail(self):
-        if self.my_userinfo_id is None:
+        if self.my_user_id is None:
             self.post = None
             self.post_content = ""
             self.post_publish_active = False
             return 
         lookups = (
-            (BlogPostModel.userinfo_id == self.my_userinfo_id) &
+            (BlogPostModel.userinfo_id == self.my_user_id) &
             (BlogPostModel.id == self.blog_post_id)
         )
         with rx.session() as session:
@@ -53,30 +59,21 @@ class BlogPostState(SessionState):
                 sqlalchemy.orm.joinedload(BlogPostModel.userinfo).joinedload(UserInfo.user)
             ).where(lookups)
             result = session.exec(sql_statement).one_or_none()
-            # if result.userinfo: # db lookup
-            #     print('working')
-            #     result.userinfo.user # db lookup
             self.post = result
             if result is None:
                 self.post_content = ""
                 return
             self.post_content = self.post.content
             self.post_publish_active = self.post.publish_active
-        # return
-
 
     def load_posts(self):
-        # if published_only:
-        #     lookup_args = ( 
-        #         (BlogPostModel.publish_active == True) &
-        #         (BlogPostModel.publish_date < datetime.now())
-        #     )
         with rx.session() as session:
             result = session.exec(
-                select(BlogPostModel)).all()
+                select(BlogPostModel).options(
+                    sqlalchemy.orm.joinedload(BlogPostModel.userinfo)
+                ).where(BlogPostModel.userinfo_id == self.my_user_id)
+            ).all()
             self.posts = result
-        return self.posts
-        # return
 
     def add_post(self, form_data:dict):
         with rx.session() as session:
@@ -104,13 +101,27 @@ class BlogPostState(SessionState):
             session.commit()
             session.refresh(post)
             self.post = post
+        return rx.redirect(f"{self.blog_post_edit_url}")
     
     def to_blog_post(self, edit_page=False):
         if not self.post:
             return rx.redirect(BLOG_POSTS_ROUTE)
         if edit_page:
-             return rx.redirect(f"{self.blog_post_edit_url}")
-        return rx.redirect(f"{self.blog_post_url}")
+            return rx.redirect(f"{self.blog_post_url}")
+        
+    def delete_blog(self):
+        with rx.session() as session:     
+            post = session.exec(
+                select(BlogPostModel).where(
+                    BlogPostModel.id == self.blog_post_id
+                )
+            ).one_or_none()
+            
+            session.delete(post)
+            session.commit()
+
+        return rx.redirect(navigation.routes.HOME_ROUTE)
+
 
 
 class BlogAddPostFormState(BlogPostState):
@@ -118,8 +129,8 @@ class BlogAddPostFormState(BlogPostState):
 
     def handle_submit(self, form_data):
         data = form_data.copy()
-        if self.my_userinfo_id is not None:
-            data['userinfo_id'] = self.my_userinfo_id
+        if self.my_user_id is not None:
+            data['userinfo_id'] = self.my_user_id
         self.form_data = data
         self.add_post(data)
         return self.to_blog_post(edit_page=True)
@@ -127,7 +138,6 @@ class BlogAddPostFormState(BlogPostState):
 
 class BlogEditFormState(BlogPostState):
     form_data: dict = {}
-    # post_content: str = ""
 
     @rx.var
     def publish_display_date(self) -> str:
@@ -148,7 +158,7 @@ class BlogEditFormState(BlogPostState):
 
     def handle_submit(self, form_data):
         self.form_data = form_data
-        post_id = form_data.pop('post_id')
+        blog_post_id = form_data.pop('blog_post_id')
         publish_date = None
         if 'publish_date' in form_data:
             publish_date = form_data.pop('publish_date')
@@ -166,5 +176,6 @@ class BlogEditFormState(BlogPostState):
         updated_data = {**form_data}
         updated_data['publish_active'] = publish_active
         updated_data['publish_date'] = final_publish_date
-        self.save_post_edits(post_id, updated_data)
+        self.save_post_edits(blog_post_id, updated_data)
         return self.to_blog_post()
+    

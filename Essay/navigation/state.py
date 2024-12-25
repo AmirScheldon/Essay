@@ -29,6 +29,9 @@ class NavState(rx.State):
     
     def to_blog_create(self):
         return self.to_blog_add()
+
+    def to_blog_delete(self):
+        return rx.redirect(routes.DELETE_ROUTE)
     
     def to_contact(self):
         return rx.redirect(routes.CONTACT_US_ROUTE)
