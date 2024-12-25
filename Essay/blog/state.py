@@ -88,11 +88,11 @@ class BlogPostState(SessionState):
 
             self.post = post
 
-    def save_post_edits(self, post_id:int, updated_data:dict):
+    def save_post_edits(self, blog_post_id:int, updated_data:dict):
         with rx.session() as session:
             post = session.exec(
                 select(BlogPostModel).where(
-                    BlogPostModel.id == post_id
+                    BlogPostModel.id == blog_post_id
                 )
             ).one_or_none()
             

@@ -10,33 +10,20 @@ from .auth.pages import (
 
 from . import navigation
 from . import blog, contact, navigation, pages
-
-class State(rx.State):
-    label = 'Label one'
-    
-    def on_change_function(self, val):
-        self.label = val
-        
-    def on_click_function(self):
-        print('clicked!')
-
+from .articles.list import article_public_list_page, article_public_lsit_component
+from .articles.state import ArticlePublicState
+from .articles.detail import article_detail_page
+from .auth.state import SessionState 
 
 @rx.page(route= navigation.routes.HOME_ROUTE)
 def index() -> rx.Component:
-    
-    child = rx.vstack(
-            # vertical stack
-            rx.heading(State.label, size= '9', align= 'center'),
-            rx.link(rx.button('About Me'), href= navigation.routes.ABOUT_US_ROUTE),
-            spacing="5",
-            justify="center",
-            align = 'center',
-            min_height="85vh",
-            id = 'child_id'
+    return base_page( 
+            rx.cond(
+                SessionState.is_authenticated,  
+                pages.dashboard_component(),
+                pages.landing_component()
+            ),
         )
-    
-    return base_page(      
-            child)
     
 app = rx.App()
 
@@ -54,6 +41,11 @@ app.add_page(
 
 # my pages
 app.add_page(
+    index, 
+    on_load=ArticlePublicState.load_posts
+)
+
+app.add_page(
     my_logout_page,
     route=navigation.routes.LOGOUT_ROUTE,
     title="Logout",
@@ -63,10 +55,21 @@ app.add_page(pages.about_page,
              route=navigation.routes.ABOUT_US_ROUTE)
 
 app.add_page(
+    article_public_list_page, 
+    route=navigation.routes.ARTICLE_LIST_ROUTE,
+    on_load=ArticlePublicState.load_posts
+ )  
+
+app.add_page(
+    article_detail_page, 
+    route=f"{navigation.routes.ARTICLE_LIST_ROUTE}/[post_id]",
+    on_load=ArticlePublicState.get_post_detail
+)
+
+app.add_page(
     blog.blog_post_list_page, 
     route=navigation.routes.BLOG_POSTS_ROUTE,
-    on_load=blog.BlogPostState.load_posts
-    
+    on_load=blog.BlogPostState.load_posts 
 )
 
 app.add_page(

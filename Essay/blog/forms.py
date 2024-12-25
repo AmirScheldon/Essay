@@ -45,7 +45,7 @@ def blog_post_edit_form() -> rx.Component:
             rx.box(
                 rx.input(
                     type='hidden',
-                    name='post_id',
+                    name='blog_post_id',
                     value=post.id
                 ),
                 display='none'

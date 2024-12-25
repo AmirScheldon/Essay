@@ -2,12 +2,11 @@ import reflex as rx
 
 from ..ui.base import base_page
 
-# @rx.page(route='/about')
 def about_page() -> rx.Component:
     my_child = rx.vstack(
-            rx.heading("About ME", size="9"),
+            rx.heading("Amirhossein Taslimi", size="9"),
             rx.text(
-                "Something cool about us.",
+                "",
             ),
             spacing="5",
             justify="center",

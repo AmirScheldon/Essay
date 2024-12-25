@@ -1,6 +1,7 @@
 import reflex as rx 
 
 from ..ui.base import base_page
+from .notfound import blog_post_not_found
 
 from . import state
 # @rx.page(route='/about')
@@ -30,5 +31,6 @@ def blog_post_detail_page() -> rx.Component:
             align="center",
             min_height="85vh"
         ), 
+        blog_post_not_found()
         )
     return base_page(my_child)

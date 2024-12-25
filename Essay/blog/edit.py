@@ -6,7 +6,7 @@ from ..ui.base import base_page
 from . import forms
 
 from .state import BlogEditFormState
-
+from .notfound import blog_post_not_found
 
 @reflex_local_auth.require_login
 def blog_post_edit_page() -> rx.Component:
@@ -36,6 +36,7 @@ def blog_post_edit_page() -> rx.Component:
                 spacing="5",
                 align="center",
                 min_height="95vh",
-            ), 
+            ),
+            blog_post_not_found()  
         )
     return base_page(my_child)

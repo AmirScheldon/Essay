@@ -26,7 +26,7 @@ def navbar() -> rx.Component:
                     ),
                     rx.link(
                         rx.heading(
-                            "Reflex", size="7", weight="bold"
+                            "Essay", size="7", weight="bold"
                         ),
                         href=navigation.routes.HOME_ROUTE
                     ),
@@ -36,7 +36,6 @@ def navbar() -> rx.Component:
                     navbar_link("Home", navigation.routes.HOME_ROUTE),
                     navbar_link("About", navigation.routes.ABOUT_US_ROUTE),
                     navbar_link("Articles", navigation.routes.ARTICLE_LIST_ROUTE),
-                    navbar_link("Pricing", navigation.routes.PRICING_ROUTE),
                     navbar_link("Contact", navigation.routes.CONTACT_US_ROUTE),
                     spacing="5",
                 ),
@@ -90,8 +89,6 @@ def navbar() -> rx.Component:
                             on_click=navigation.NavState.to_about_us),
                         rx.menu.item("Articles", 
                             on_click=navigation.NavState.to_articles),
-                        rx.menu.item("Pricing", 
-                            on_click=navigation.NavState.to_pricing),
                         rx.menu.item("Contact", 
                             on_click=navigation.NavState.to_contact),
                         rx.menu.separator(),
