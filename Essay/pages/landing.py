@@ -1,6 +1,6 @@
 import reflex as rx 
 
-from ..articles.list import article_public_lsit_component
+from ..articles.pages import article_public_lsit_component
 from .. import navigation
 
 def landing_component() -> rx.Component:

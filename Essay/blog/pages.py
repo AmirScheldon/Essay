@@ -5,7 +5,8 @@ from ..ui.base import base_page
 from ..models import BlogPostModel
 from . import state
 from . import forms
-from .state import BlogEditFormState, BlogPostState
+from .state import BlogEditFormState, BlogPostState, SessionState
+
 
 def blog_post_not_found() -> rx.Component:
     return rx.hstack(
@@ -18,6 +19,7 @@ def blog_post_not_found() -> rx.Component:
 
 
 def blog_post_detail_link(child: rx.Component, post: BlogPostModel):
+    username = SessionState.authenticated_username
     if post is None:
         return rx.fragment(child)
     post_id = post.id
@@ -28,7 +30,7 @@ def blog_post_detail_link(child: rx.Component, post: BlogPostModel):
 
     return rx.link(
         child,
-        rx.heading(f"by  {post.userinfo.user.username}"),
+        rx.heading("by ", username),
         href=post_detail_url
     )
 
@@ -45,16 +47,34 @@ def blog_post_list_item(post: BlogPostModel):
 @reflex_local_auth.require_login
 def blog_post_list_page() ->rx.Component:
     return base_page(
-        rx.vstack(
-            rx.heading("Blog Posts",  size="5"),
-            rx.link(
-                rx.button("New Post"),
-                href=navigation.routes.BLOG_POST_ADD_ROUTE
+        rx.box(
+            rx.center(
+                rx.heading("Blog Posts",  size="5"),
+                    rx.link(
+                        rx.button("New Post"),
+                        href=navigation.routes.BLOG_POST_ADD_ROUTE
+                    ),
+                padding='1em',
+                align='center',
+                justify='center',
+                direction='column'
+                ),
+            rx.box(
+                rx.flex(
+                    rx.foreach(state.BlogPostState.posts, blog_post_list_item),
+                    rx.vstack(
+                        spacing="5",
+                        align="center",
+                        min_height="85vh",
+                    ),
+                direction='column'
+                ),
+            size='5',
+            flex_wrap="wrap",
+            width="100%",
             ),
-            rx.foreach(state.BlogPostState.posts, blog_post_list_item),
-            spacing="5",
-            align="center",
-            min_height="85vh",
+        align='center',
+        justify='center',
         ),
     ) 
 
@@ -111,41 +131,42 @@ def blog_post_detail_page() -> rx.Component:
         state.BlogPostState.post, 
             rx.vstack(
                 rx.hstack(
-                    rx.card(
-                            rx.flex(
-                                rx.box(
-                                    rx.heading(state.BlogPostState.post.title, size="9"),
-                                ),
-                                spacing="2",
+                    rx.flex(
+                        rx.box(
+                            rx.heading(state.BlogPostState.post.title, size="9"),
                         ),
-                        as_child=True,
+                        spacing="2",
                     ),
                     rx.text(state.BlogPostState.post.publish_date),
-
                     align='end'
                 ),
-                    rx.card(
-                        rx.flex(
-                            rx.box(
-                                rx.text(
-                                    state.BlogPostState.post.content,
-                                    white_space='pre-wrap'
-                                ),
-                                size='25vh',
+                    rx.flex(
+                        rx.box(
+                            rx.text(
+                                state.BlogPostState.post.content,
+                                white_space='pre-wrap'
+                            ),
+                            size='25vh',
+                        ),
+                    ),
+                    rx.hstack(
+                        rx.box(
+                            rx.button(
+                            edit_link_el,
+                            color_scheme= 'gray',
+                            padding='15px',
+                            margin='10px'
+                            ),
+                            rx.button(
+                                delete_link_el,
+                                color_scheme= 'red',
+                                padding='15px',
+                                margin='10px'
                             ),
                         ),
-                    as_child=True,
-                    ),
-                    rx.button(
-                    edit_link_el,
-                    color_scheme= 'gray'
-                    ),
-                    rx.button(
-                        delete_link_el,
-                        color_scheme= 'red'
                     ),
             spacing="5",
-            align="center",
+            align="start",
             min_height="85vh"
             ),
         blog_post_not_found()
@@ -154,29 +175,49 @@ def blog_post_detail_page() -> rx.Component:
     return base_page(my_child)
 
 def my_delete_page() -> rx.Component: 
-    child = rx.vstack(
-            rx.heading('Do you want to delete?', size= '9', align= 'center'),
-            rx.link(
-                rx.button(
-                    'Yes, Delete',
-                    on_click=BlogPostState.delete_blog,
-                    size='4'
+    child = rx.box( 
+            rx.vstack(
+                    rx.heading('Do you want to delete?', size= '9', align= 'center'),
+                    rx.hstack(
+                        rx.box(
+                            rx.link(
+                                rx.button(
+                                    'Yes',
+                                    on_click=BlogPostState.delete_blog,
+                                    size='4'
+                                ),
+                            ),
+                        border_radius="15px",
+                        width="100%",
+                        margin="16px",
+                        padding="16px"
+                        ),
+                        rx.box(
+                            rx.link(
+                                rx.button(
+                                    'No',
+                                    color_scheme= 'gray',
+                                    size='4'
+                                ),
+                                href=navigation.routes.HOME_ROUTE
+                            ),
+                        border_radius="15px",
+                        width="100%",
+                        margin="16px",
+                        padding="16px"
+                        ),
+                    ),
+                    spacing="5",
+                    justify="center",
+                    align = 'center',
+                    min_height="85vh",
+                    id = 'child_id'
                 ),
-            ),
-            rx.link(
-                rx.button(
-                    'No',
-                    color_scheme= 'gray',
-                    size='4'
-                ),
-                href=navigation.routes.HOME_ROUTE
-            ),
-            spacing="5",
-            justify="center",
-            align = 'center',
-            min_height="85vh",
-            id = 'child_id'
-        )
+            radius="full",
+            width="100%",
+            margin="24px",
+            padding="25px",
+    )
     
     return base_page(      
             child)

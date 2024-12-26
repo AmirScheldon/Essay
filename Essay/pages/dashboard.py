@@ -1,6 +1,6 @@
 import reflex as rx 
 
-from ..articles.list import article_public_lsit_component
+from ..articles.pages import article_public_lsit_component
 
 def dashboard_component() -> rx.Component:
     return rx.box(

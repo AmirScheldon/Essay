@@ -5,13 +5,21 @@ from . import form, state
 
 def contact_entry_list_item(contact: ContactEntryModel):
     return rx.box(
-        rx.heading(contact.first_name),
-        rx.text("Message:", contact.message),
-        rx.cond(contact.user_id, 
-                rx.text("User Id:", f"{contact.user_id}",), 
-                rx.fragment("")),
-        padding='1em'
-    )
+            rx.flex(
+                rx.card(
+                    rx.vstack(
+                        rx.heading('User',contact.first_name),
+                        rx.text(f"Message: {contact.message}"),
+                        padding='1em',
+                        align='start'
+                        ),
+                    ),
+            direction='column'
+                ),
+            size='5',
+            flex_wrap="wrap",
+            width="100%",
+            )
 
 def contact_entries_list_page() ->rx.Component:
     return base_page(

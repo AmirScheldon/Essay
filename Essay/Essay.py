@@ -10,9 +10,8 @@ from .auth.pages import (
 
 from . import navigation
 from . import blog, contact, navigation, pages
-from .articles.list import article_public_list_page, article_public_lsit_component
+from .articles.pages import article_public_list_page, article_detail_page
 from .articles.state import ArticlePublicState
-from .articles.detail import article_detail_page
 from .auth.state import SessionState 
 
 @rx.page(route= navigation.routes.HOME_ROUTE)

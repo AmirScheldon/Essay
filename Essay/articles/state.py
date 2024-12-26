@@ -20,6 +20,7 @@ class ArticlePublicState(SessionState):
     post_publish_active: bool = False
     limit: int = 20
 
+        
     @rx.var
     def dynamic_post_id(self):
         return self.router.page.params.get("post_id", "")
@@ -52,7 +53,6 @@ class ArticlePublicState(SessionState):
                 return
             self.post_content = self.post.content
             self.post_publish_active = self.post.publish_active
-        # return
 
     def set_limit_and_reload(self, new_limit: int=5):
         self.limit = new_limit

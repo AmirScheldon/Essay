@@ -39,29 +39,49 @@ def my_register_page()->rx.Component:
 
 
 def my_logout_page() -> rx.Component: 
-    child = rx.vstack(
-            # vertical stack
-            rx.heading('Do you want to logout?', size= '9', align= 'center'),
-            rx.link(
-                rx.button(
-                    'Yes, logout',
-                    on_click=SessionState.my_logout 
-                )
-            ),
-            rx.link(
-                rx.button(
-                    'No',
-                    color_scheme= 'gray'
+    child = rx.box(
+            rx.vstack(
+                    rx.heading('Do you want to logout?', size= '9', align= 'center'),
+                    rx.hstack(
+                        rx.box(
+                            rx.link(
+                                rx.button(
+                                    'Yes',
+                                    on_click=SessionState.my_logout,
+                                    size='4'
+                                )
+                            ),
+                        border_radius="15px",
+                        width="100%",
+                        margin="16px",
+                        padding="16px"
+                        ),
+                        rx.box(
+                            rx.link(
+                                rx.button(
+                                    'No',
+                                    color_scheme= 'gray',
+                                    size='4'
+                                ),
+                                href=navigation.routes.HOME_ROUTE
+                            ),
+                            border_radius="15px",
+                            width="100%",
+                            margin="16px",
+                            padding="16px"
+                            ),
+                    ),
+                    spacing="5",
+                    justify="center",
+                    align = 'center',
+                    min_height="85vh",
+                    id = 'child_id'
                 ),
-                href=navigation.routes.HOME_ROUTE
-            ),
-            spacing="5",
-            justify="center",
-            align = 'center',
-            min_height="85vh",
-            id = 'child_id'
+            radius="full",
+            width="100%",
+            margin="24px",
+            padding="25px",
         )
-    
     return base_page(      
             child)
 
