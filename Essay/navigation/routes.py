@@ -1,3 +1,5 @@
+# URLs
+
 HOME_ROUTE="/"
 ABOUT_US_ROUTE="/about"
 ARTICLE_LIST_ROUTE="/articles"

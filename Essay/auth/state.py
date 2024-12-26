@@ -23,6 +23,11 @@ class SessionState(reflex_local_auth.LocalAuthState):
 
     @rx.var(cache=True)
     def authenticated_user_info(self) -> UserInfo | None:
+        """_summary_
+            return an instance of UserInfo(a table from dataabase)
+        Returns:
+            UserInfo | None: instance of The UserInfo | None
+        """        
         if self.authenticated_user.id < 0:
             return None
         try:
@@ -30,7 +35,7 @@ class SessionState(reflex_local_auth.LocalAuthState):
                 result = session.exec(
                     sqlmodel.select(UserInfo).where(
                         UserInfo.user_id == self.authenticated_user.id
-                    ),
+                    ), #checks if the logged-in user and instance from database have same IDs
                 ).one_or_none()
                 if result is None:
                     return None
@@ -53,7 +58,15 @@ class SessionState(reflex_local_auth.LocalAuthState):
 
 class MyRegisterState(reflex_local_auth.RegistrationState):
     
-    def handle_registrations(self, form_data):
+    def handle_registrations(self, form_data:dict) -> int:
+        """_summary_
+            depack the registrations form data and creates username, password and user_id
+        Args:
+            form_data (dictionary): data from registration form
+
+        Returns:
+            int: users ID
+        """        
         username = form_data["username"]
         password = form_data["password"]
         validation_errors = self._validate_fields(
@@ -65,7 +78,13 @@ class MyRegisterState(reflex_local_auth.RegistrationState):
         self._register_user(username, password)
         return self.new_user_id
     
-    def handle_registration_email(self, form_data):
+    def handle_registration_email(self, form_data:dict):
+        """_summary_
+           depack the registrations form data and register email 
+        Args:
+            form_data (dictionary): data from registration form
+
+        """ 
         new_user_id = self.handle_registrations(form_data)
         if new_user_id >= 0:
             with rx.session() as session:

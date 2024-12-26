@@ -1,7 +1,7 @@
 import reflex as rx
 
 from reflex_local_auth.pages.login import LoginState, login_form
-from reflex_local_auth.pages.registration import RegistrationState, register_form
+from reflex_local_auth.pages.registration import RegistrationState
 
 from .. import navigation
 from ..ui.base import base_page
@@ -25,11 +25,11 @@ def my_register_page()->rx.Component:
     return base_page(
         rx.center(
             rx.cond(
-                RegistrationState.success,
+                RegistrationState.success, # If the registration is successfully done
                 rx.vstack(
                     rx.text("Registration successful!"),
-                ),
-                rx.card(my_register_form()),
+                ),# do this
+                rx.card(my_register_form()), # else user refill registration form
                 
             ),
              min_height="85vh",
@@ -47,7 +47,7 @@ def my_logout_page() -> rx.Component:
                             rx.link(
                                 rx.button(
                                     'Yes',
-                                    on_click=SessionState.my_logout,
+                                    on_click=SessionState.my_logout, # logouts the user
                                     size='4'
                                 )
                             ),
@@ -63,7 +63,7 @@ def my_logout_page() -> rx.Component:
                                     color_scheme= 'gray',
                                     size='4'
                                 ),
-                                href=navigation.routes.HOME_ROUTE
+                                href=navigation.routes.HOME_ROUTE # returns the use to the home page
                             ),
                             border_radius="15px",
                             width="100%",

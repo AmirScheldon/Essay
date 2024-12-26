@@ -49,8 +49,8 @@ class BlogPostState(SessionState):
             self.post_publish_active = False
             return 
         lookups = (
-            (BlogPostModel.userinfo_id == self.my_user_id) &
-            (BlogPostModel.id == self.blog_post_id)
+            (BlogPostModel.userinfo_id == self.my_user_id) & #the post authors id ==  the authenticated user who made the request.
+            (BlogPostModel.id == self.blog_post_id) #the post id from database == requested post ID in the URL
         )
         with rx.session() as session:
             if self.blog_post_id == "":
@@ -60,16 +60,13 @@ class BlogPostState(SessionState):
                 sqlalchemy.orm.joinedload(BlogPostModel.userinfo).joinedload(UserInfo.user)
             ).where(lookups)
             result = session.exec(sql_statement).one_or_none()
-            # if result.userinfo: # db lookup
-            #     print('working')
-            #     result.userinfo.user # db lookup
             self.post = result
             if result is None:
                 self.post_content = ""
                 return
-            self.post_content = self.post.content
+            self.post_content = self.post.content 
             self.post_publish_active = self.post.publish_active
-        # return
+
 
 
     def load_posts(self):

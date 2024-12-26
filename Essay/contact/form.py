@@ -9,12 +9,12 @@ def contact_form() -> rx.Component:
     valid_user = SessionState.is_authenticated
     return rx.form(
                 rx.cond(
-                    valid_user,
+                    valid_user, # if the user is authenticated
                     rx.box(
                         rx.box(
                             rx.text_area(
                                 name='first_name',
-                                value= username,
+                                value= username, # takes(autofill) and sends the username
                                 required=True,
                                 type='hidden',
                             ),
@@ -28,7 +28,7 @@ def contact_form() -> rx.Component:
                             width='100%',
                         ),
                         padding='1em'
-                    ),
+                    ), # shows this form
                     rx.vstack(
                         rx.hstack(
                             rx.input(
@@ -59,7 +59,7 @@ def contact_form() -> rx.Component:
                             height='50vh',
                             width='100%',
                         ),
-                    ),
+                    ),# else shows this form
                 ),
                 rx.button("Submit", type="submit"),
                 on_submit=ContactState.handle_submit,

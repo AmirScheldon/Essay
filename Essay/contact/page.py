@@ -4,6 +4,7 @@ from ..models import ContactEntryModel
 from . import form, state
 
 def contact_entry_list_item(contact: ContactEntryModel):
+    # shows all contacts
     return rx.box(
             rx.flex(
                 rx.card(

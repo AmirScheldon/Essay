@@ -15,12 +15,12 @@ class ContactState(SessionState):
 
     @rx.var
     def thank_you(self):
+        # returns a  thank_you message after the user sends a message
         first_name = self.form_data.get("first_name") or ""
         return f"Thank you {first_name}".strip() + "!"
 
     async def handle_submit(self, form_data: dict):
         """Handle the form submit."""
-        # print(form_data)
         self.form_data = form_data
         data = {}
         for k,v in form_data.items():
@@ -32,6 +32,7 @@ class ContactState(SessionState):
         if self.my_user_id is not None:
             data['user_id'] = self.my_user_id   
         with rx.session() as session:
+            # depack the data(from form) and save it on database
             db_entry = ContactEntryModel(
                 **data
             )
@@ -45,6 +46,7 @@ class ContactState(SessionState):
 
     def list_entries(self):
         with rx.session() as session:
+            # retrieves all contacts form database
             entries = session.exec(
                 select(ContactEntryModel)
             ).all()

@@ -6,6 +6,7 @@ from ..auth.state import SessionState
 from .. import navigation 
 
 def user_info_account()-> rx.Component:
+    # shows username and users email
     user_info_username = rx.cond(SessionState.is_authenticated, SessionState.authenticated_username, 'Account')
     auth_user_info = SessionState.authenticated_user_info
     return rx.cond(

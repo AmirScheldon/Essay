@@ -9,7 +9,7 @@ def landing_component() -> rx.Component:
             rx.link(rx.button('About Me'), href= navigation.routes.ABOUT_US_ROUTE),
             rx.heading('Recent Articles', size= '4', align= 'center'),
             rx.divider(),
-            article_public_lsit_component(columns=1, limit=1),
+            article_public_lsit_component(columns=1, limit=1), # just shows last article in main page
             spacing="5",
             justify="center",
             align = 'center',

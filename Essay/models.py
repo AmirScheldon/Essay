@@ -8,6 +8,8 @@ from sqlmodel import Field, Relationship
 
 from . import utils
 
+#DataBase
+
 class UserInfo(rx.Model, table=True):
     email: str
     user_id: int = Field(foreign_key='localuser.id')

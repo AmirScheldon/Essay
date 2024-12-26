@@ -9,6 +9,11 @@ from .state import BlogEditFormState, BlogPostState, SessionState
 
 
 def blog_post_not_found() -> rx.Component:
+    """_summary_
+     If the user is not allowed to access a page or a post does not exists, this page will be shown
+    Returns:
+        rx.Component: page
+    """    
     return rx.hstack(
         rx.heading('Blog Post Not found!'),
         spacing='5',
@@ -19,6 +24,15 @@ def blog_post_not_found() -> rx.Component:
 
 
 def blog_post_detail_link(child: rx.Component, post: BlogPostModel):
+    """_summary_
+        create link for each card in post page
+    Args:
+        child (rx.Component)
+        post (BlogPostModel): takes an instance of model
+
+    Returns:
+        link: returns a link 
+    """
     username = SessionState.authenticated_username
     if post is None:
         return rx.fragment(child)
@@ -35,7 +49,12 @@ def blog_post_detail_link(child: rx.Component, post: BlogPostModel):
     )
 
 def blog_post_list_item(post: BlogPostModel):
+    """_summary_
+        passes title of the post and the post to blog_post_detail_link
+    Args:
+        post (BlogPostModel): takes an instance of model
 
+    """
     return rx.box(
         blog_post_detail_link(
             rx.heading(post.title),
@@ -51,7 +70,7 @@ def blog_post_list_page() ->rx.Component:
             rx.center(
                 rx.heading("Blog Posts",  size="5"),
                     rx.link(
-                        rx.button("New Post"),
+                        rx.button("New Post"), # redirect to a new page to create a new post
                         href=navigation.routes.BLOG_POST_ADD_ROUTE
                     ),
                 padding='1em',
@@ -114,21 +133,21 @@ def blog_post_edit_page() -> rx.Component:
 def blog_post_detail_page() -> rx.Component:
     can_edit = True
     can_delete = True
-    edit_link = rx.link("Edit", href=state.BlogPostState.blog_post_edit_url)
-    delete_link = rx.link("Delete", href=state.BlogPostState.blog_post_delete_url)
+    edit_link = rx.link("Edit", href=state.BlogPostState.blog_post_edit_url) # the method that edits a post
+    delete_link = rx.link("Delete", href=state.BlogPostState.blog_post_delete_url) # the method that delete a post
     edit_link_el = rx.cond(
         can_edit,
         edit_link,
-        rx.fragment("")
+        rx.fragment("") # None
     )
     delete_link_el = rx.cond(
         can_delete,
         delete_link,
-        rx.fragment("")
+        rx.fragment("") # None
     )
     
     my_child = rx.cond(
-        state.BlogPostState.post, 
+        state.BlogPostState.post, # if there is a post
             rx.vstack(
                 rx.hstack(
                     rx.flex(
@@ -152,13 +171,13 @@ def blog_post_detail_page() -> rx.Component:
                     rx.hstack(
                         rx.box(
                             rx.button(
-                            edit_link_el,
+                            edit_link_el, # edit button
                             color_scheme= 'gray',
                             padding='15px',
                             margin='10px'
                             ),
                             rx.button(
-                                delete_link_el,
+                                delete_link_el, # delete button
                                 color_scheme= 'red',
                                 padding='15px',
                                 margin='10px'
@@ -168,8 +187,8 @@ def blog_post_detail_page() -> rx.Component:
             spacing="5",
             align="start",
             min_height="85vh"
-            ),
-        blog_post_not_found()
+            ),# returns this page
+        blog_post_not_found() # else returns this page
         ), 
         
     return base_page(my_child)
@@ -182,8 +201,8 @@ def my_delete_page() -> rx.Component:
                         rx.box(
                             rx.link(
                                 rx.button(
-                                    'Yes',
-                                    on_click=BlogPostState.delete_blog,
+                                    'Yes', 
+                                    on_click=BlogPostState.delete_blog, #deletes the post
                                     size='4'
                                 ),
                             ),
@@ -199,7 +218,7 @@ def my_delete_page() -> rx.Component:
                                     color_scheme= 'gray',
                                     size='4'
                                 ),
-                                href=navigation.routes.HOME_ROUTE
+                                href=navigation.routes.HOME_ROUTE # redirects the user to the home page
                             ),
                         border_radius="15px",
                         width="100%",
@@ -224,6 +243,7 @@ def my_delete_page() -> rx.Component:
     
 @reflex_local_auth.require_login
 def blog_post_add_page() -> rx.Component:
+    # create post page
     my_form = forms.blog_post_add_form()
     my_child = rx.vstack(
             rx.heading("New Blog Post", size="9"),

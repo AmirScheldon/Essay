@@ -39,7 +39,6 @@ def blog_post_add_form() -> rx.Component:
 def blog_post_edit_form() -> rx.Component:
     post = BlogEditFormState.post
     title = post.title
-    publish_active = post.publish_active
     post_content = BlogEditFormState.post_content
     return rx.form(
             rx.box(
@@ -81,7 +80,7 @@ def blog_post_edit_form() -> rx.Component:
                     spacing="2",
                 ),
                 rx.cond(
-                    BlogEditFormState.post_publish_active,
+                    BlogEditFormState.post_publish_active, # if rx.switch is post_publish_active(=True)
                     rx.box(
                         rx.hstack(
                             rx.input(
@@ -100,8 +99,8 @@ def blog_post_edit_form() -> rx.Component:
                         ),
                         width='100%'
                     )
-                ),
+                ),# The user can set a time to publish their post.
                 rx.button("Submit", type="submit"),
-            ),
+            ),# else just submit the post
             on_submit=BlogEditFormState.handle_submit,
     )

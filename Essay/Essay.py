@@ -16,6 +16,7 @@ from .auth.state import SessionState
 
 @rx.page(route= navigation.routes.HOME_ROUTE)
 def index() -> rx.Component:
+    #home pages
     return base_page( 
             rx.cond(
                 SessionState.is_authenticated,  
@@ -25,6 +26,7 @@ def index() -> rx.Component:
         )
     
 app = rx.App()
+#delcare all pages 
 
 # reflex_local_auth pages
 app.add_page(
