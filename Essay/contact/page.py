@@ -9,7 +9,7 @@ def contact_entry_list_item(contact: ContactEntryModel):
             rx.flex(
                 rx.card(
                     rx.vstack(
-                        rx.heading('User',contact.first_name),
+                        rx.heading('User: ',contact.first_name),
                         rx.text(f"Message: {contact.message}"),
                         padding='1em',
                         align='start'

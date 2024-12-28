@@ -1,12 +1,8 @@
 import reflex as rx 
 
-from ..articles.pages import article_public_lsit_component
-
 def dashboard_component() -> rx.Component:
-    return rx.box(
-        rx.heading('Welcome back', size='2'),
-        rx.divider(margin_top='1em', margin_bottom='1em'),
-        article_public_lsit_component(columns=3, limit=20),
+    return rx.center(
+        rx.heading('Welcome back', size='9'),
         min_height='85vh',
-        
+        align='center'
     )

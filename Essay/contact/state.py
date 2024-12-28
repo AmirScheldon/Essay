@@ -3,7 +3,7 @@ import asyncio
 import reflex as rx 
 
 from sqlmodel import select
-
+import sqlalchemy
 
 from ..auth.state import SessionState
 from ..models import ContactEntryModel
@@ -48,6 +48,8 @@ class ContactState(SessionState):
         with rx.session() as session:
             # retrieves all contacts form database
             entries = session.exec(
-                select(ContactEntryModel)
+                select(ContactEntryModel).options(
+                    sqlalchemy.orm.joinedload(ContactEntryModel.userinfo)
+                     ).where(ContactEntryModel.user_id == self.my_user_id) 
             ).all()
             self.entries = entries

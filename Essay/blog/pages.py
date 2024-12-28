@@ -14,11 +14,13 @@ def blog_post_not_found() -> rx.Component:
     Returns:
         rx.Component: page
     """    
-    return rx.hstack(
-        rx.heading('Blog Post Not found!'),
-        spacing='5',
-        align='center',
-        min_height='85vh'
+    return rx.center(
+            rx.hstack(
+                rx.heading('Blog Post Not found!'),
+                spacing='5',
+                align='center',
+                min_height='85vh'
+        ),
     )
     
 

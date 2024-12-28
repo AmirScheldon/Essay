@@ -20,6 +20,10 @@ class ArticlePublicState(SessionState):
     post_publish_active: bool = False
     limit: int = 20
 
+    @rx.var
+    def author_name(self):
+        select(BlogPostModel).options(
+                sqlalchemy.orm.joinedload(BlogPostModel.userinfo).joinedload(UserInfo.user)
         
     @rx.var
     def dynamic_post_id(self) -> int :

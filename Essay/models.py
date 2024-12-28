@@ -13,7 +13,7 @@ from . import utils
 class UserInfo(rx.Model, table=True):
     email: str
     user_id: int = Field(foreign_key='localuser.id')
-    user: LocalUser | None = Relationship() # LocalUser instance
+    user: LocalUser | None = Relationship(link_model= LocalUser) # LocalUser instance
     posts: List['BlogPostModel'] = Relationship(back_populates='userinfo')
     contact_enteries: List['ContactEntryModel'] = Relationship(back_populates='userinfo')
     created_at: datetime = Field(

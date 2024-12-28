@@ -4,7 +4,6 @@ from .. import navigation
 from ..ui.base import base_page
 from ..models import BlogPostModel
 from . import state
-from .state import SessionState
 from ..blog.pages import blog_post_not_found
 
 def article_card_link(post: BlogPostModel):
@@ -70,13 +69,11 @@ def article_detail_page() -> rx.Component:
     """_summary_
         shows published articles details
     """  
-    usrername = SessionState.authenticated_username 
     my_child = rx.cond(state.ArticlePublicState.post, # if post does exist
             rx.vstack(
                 rx.hstack(
                     rx.flex(
                     rx.heading(state.ArticlePublicState.post.title, size="9"),
-                    rx.text('by: ', usrername),
                     align='end'
                     ),
                 ),
