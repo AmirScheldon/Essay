@@ -17,7 +17,7 @@ def article_card_link(post: BlogPostModel):
     """    
     post_id = post.id
     if post_id is None:
-        return rx.fragment('Not Found!') # if there is not post to route to, returns a fragment
+        return rx.fragment('Not Found!') # if there is no post to route to, returns a fragment
     root_path = navigation.routes.ARTICLE_LIST_ROUTE
     post_detail_url = f"{root_path}/{post_id}" # declare an url path to detail of a post
 
@@ -25,7 +25,7 @@ def article_card_link(post: BlogPostModel):
     rx.link(
         rx.flex(
             rx.box(
-                rx.heading(post.title),
+                rx.heading(post.title) #retrive title of a post from database
             ),
             spacing="2",
         ),
@@ -46,10 +46,10 @@ def article_public_lsit_component(columns:int=3, spacing:int=5, limit:int=10)-> 
         rx.Component: retruns Grids
     """    
     return rx.grid(
-        rx.foreach(state.ArticlePublicState.posts, article_card_link),
+        rx.foreach(state.ArticlePublicState.posts, article_card_link), # loops through all posts and create link card for them
         columns= f'{columns}',
         spacing= f'{spacing}',
-        on_mount=lambda: state.ArticlePublicState.set_limit_and_reload(limit)
+        on_mount=lambda: state.ArticlePublicState.set_limit_and_reload(limit) #sets limi per page
     )
 @reflex_local_auth.require_login
 def article_public_list_page() ->rx.Component:
@@ -73,15 +73,16 @@ def article_detail_page() -> rx.Component:
             rx.vstack(
                 rx.hstack(
                     rx.flex(
-                    rx.heading(state.ArticlePublicState.post.title, size="9"),
+                    rx.heading(f'{state.ArticlePublicState.post.title} ', size="9"), #retrive title of the post from database
+                    rx.text(f'by  {state.ArticlePublicState.post.author}'), #retrive author of the post from database
                     align='end'
                     ),
                 ),
-            rx.text('Published at: ',state.ArticlePublicState.post.publish_date),
+            rx.text('Published at: ',state.ArticlePublicState.post.publish_date),  #retrive posts publish date from database
                 rx.flex(
                     rx.box(
                         rx.text(
-                            state.ArticlePublicState.post.content,
+                            state.ArticlePublicState.post.content, #retrive posts content from database
                             white_space='pre-wrap'
                         ),
                     ),

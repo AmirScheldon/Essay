@@ -21,22 +21,34 @@ class BlogPostState(SessionState):
 
     @rx.var
     def blog_post_id(self):
+        """_summary_
+            gets and returns post ID from URL as a variable
+        """        
         return self.router.page.params.get("blog_id", "")
 
     @rx.var
     def blog_post_url(self):
+        """_summary_
+            creates and returns an url for a post page as a variable
+        """        
         if not self.post:
             return f"{BLOG_POSTS_ROUTE}"
         return f"{BLOG_POSTS_ROUTE}/{self.post.id}"
 
     @rx.var
     def blog_post_edit_url(self) -> str:
+        """_summary_
+            creates and returns an url for a edit post page as a variable
+        """ 
         if not self.post:
             return f"{BLOG_POSTS_ROUTE}"
         return f"{BLOG_POSTS_ROUTE}/{self.post.id}/edit"
     
     @rx.var
     def blog_post_delete_url(self) -> str:
+        """_summary_
+            creates and returns an url for a delete post page as a variable
+        """ 
         if not self.post:
             return f"{BLOG_POSTS_ROUTE}"
         return f"{BLOG_POSTS_ROUTE}/{self.post.id}/delete"
@@ -49,15 +61,15 @@ class BlogPostState(SessionState):
             self.post_publish_active = False
             return 
         lookups = (
-            (BlogPostModel.userinfo_id == self.my_user_id) & #the post authors id ==  the authenticated user who made the request.
-            (BlogPostModel.id == self.blog_post_id) #the post id from database == requested post ID in the URL
+            (BlogPostModel.userinfo_id == self.my_user_id) & #compares an user-id from database with authenticated user IDs
+            (BlogPostModel.id == self.blog_post_id)  # compares databases post ID with URLs post ID
         )
         with rx.session() as session:
             if self.blog_post_id == "":
                 self.post = None
                 return
             sql_statement = select(BlogPostModel).options(
-                sqlalchemy.orm.joinedload(BlogPostModel.userinfo).joinedload(UserInfo.user)
+                sqlalchemy.orm.joinedload(BlogPostModel.userinfo).joinedload(UserInfo.user) #Joins two BlogPostModel, UserInfo tables and sets the conditions on them  
             ).where(lookups)
             result = session.exec(sql_statement).one_or_none()
             self.post = result
@@ -70,6 +82,7 @@ class BlogPostState(SessionState):
 
 
     def load_posts(self):
+        # Reads posts
         with rx.session() as session:
             result = session.exec(
                 select(BlogPostModel).options(
@@ -79,6 +92,7 @@ class BlogPostState(SessionState):
             self.posts = result
 
     def add_post(self, form_data:dict):
+        # Creates posts
         with rx.session() as session:
             post = BlogPostModel(**form_data)
 
@@ -89,6 +103,7 @@ class BlogPostState(SessionState):
             self.post = post
 
     def save_post_edits(self, blog_post_id:int, updated_data:dict):
+        #Updates posts
         with rx.session() as session:
             post = session.exec(
                 select(BlogPostModel).where(
@@ -106,6 +121,7 @@ class BlogPostState(SessionState):
             self.post = post
             
     def delete_blog(self):
+        #Deletes posts
         with rx.session() as session:     
             post = session.exec(
                 select(BlogPostModel).where(

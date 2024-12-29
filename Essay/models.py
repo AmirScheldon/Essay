@@ -13,7 +13,7 @@ from . import utils
 class UserInfo(rx.Model, table=True):
     email: str
     user_id: int = Field(foreign_key='localuser.id')
-    user: LocalUser | None = Relationship(link_model= LocalUser) # LocalUser instance
+    user: LocalUser | None = Relationship() # LocalUser instance
     posts: List['BlogPostModel'] = Relationship(back_populates='userinfo')
     contact_enteries: List['ContactEntryModel'] = Relationship(back_populates='userinfo')
     created_at: datetime = Field(
@@ -40,6 +40,7 @@ class BlogPostModel(rx.Model, table=True):
     userinfo: Optional['UserInfo'] = Relationship(back_populates='posts')
     title: str
     content: str
+    author: str
     created_at: datetime = Field(
         default_factory=utils.timing.get_utc_now,
         sa_type=sqlalchemy.DateTime(timezone=True),

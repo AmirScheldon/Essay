@@ -32,7 +32,7 @@ class ContactState(SessionState):
         if self.my_user_id is not None:
             data['user_id'] = self.my_user_id   
         with rx.session() as session:
-            # depack the data(from form) and save it on database
+            # depacks the data(from form) and saves it on database
             db_entry = ContactEntryModel(
                 **data
             )

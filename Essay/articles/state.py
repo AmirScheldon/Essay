@@ -19,16 +19,12 @@ class ArticlePublicState(SessionState):
     post_content: str = ""
     post_publish_active: bool = False
     limit: int = 20
-
-    @rx.var
-    def author_name(self):
-        select(BlogPostModel).options(
-                sqlalchemy.orm.joinedload(BlogPostModel.userinfo).joinedload(UserInfo.user)
+    author: str = ''
         
     @rx.var
     def dynamic_post_id(self) -> int :
         """_summary_
-            returns ID of a post as a variable
+            gets and returns post ID from URL as a variable
         """        
         return self.router.page.params.get("post_id", "")
 
@@ -43,22 +39,23 @@ class ArticlePublicState(SessionState):
 
     def get_post_detail(self):
         """_summary_
-            returns post based of the written query.
+            retrievs all posts details
         """        
         lookups = (
             (BlogPostModel.publish_active == True) &
             (BlogPostModel.publish_date < datetime.now()) &
-            (BlogPostModel.id == self.dynamic_post_id)
+            (BlogPostModel.id == self.dynamic_post_id) # compares databases post ID with URLs post ID 
         )
         with rx.session() as session:
             if self.post_id == "":
                 self.post = None
                 self.post_content = ""
                 self.post_publish_active = False
+                self.author = ''
                 return
             sql_statement = select(BlogPostModel).options(
                 sqlalchemy.orm.joinedload(BlogPostModel.userinfo).joinedload(UserInfo.user)
-            ).where(lookups) 
+            ).where(lookups)# Joins three BlogPostModel, UserInfo, LocalUser tables and sets the conditions on them 
             result = session.exec(sql_statement).one_or_none()
             self.post = result
             if result is None:
@@ -66,6 +63,7 @@ class ArticlePublicState(SessionState):
                 return
             self.post_content = self.post.content # sets content of post
             self.post_publish_active = self.post.publish_active # sets published status
+            self.author = self.post.author
 
     def set_limit_and_reload(self, new_limit: int=5):
         """_summary_
@@ -85,7 +83,7 @@ class ArticlePublicState(SessionState):
                 select(BlogPostModel).options(
                     sqlalchemy.orm.joinedload(BlogPostModel.userinfo)
                 ).where(lookup_args).limit(self.limit)
-            ).all() # Loads a limited number of published posts. 
+            ).all() #Joins two BlogPostModel, UserInfo tables and Loads a limited number of published posts. 
             self.posts = result
     
     def to_post(self):

@@ -1,5 +1,5 @@
 import reflex as rx 
-
+from..auth.state import  SessionState
 
 from .state import (
     BlogAddPostFormState,
@@ -8,9 +8,19 @@ from .state import (
 
 
 def blog_post_add_form() -> rx.Component:
+    username = SessionState.authenticated_username
     return rx.form(
             rx.vstack(
                 rx.hstack(
+                    rx.box(
+                        rx.text_area(
+                            name='author',
+                            value= username, # takes(autofill) and sends the username
+                            required=True,
+                            type='hidden',
+                        ),
+                        display='none'
+                    ),
                     rx.input(
                         name="title",
                         placeholder="Title",
