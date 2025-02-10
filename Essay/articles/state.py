@@ -21,15 +21,15 @@ class ArticlePublicState(SessionState):
     limit: int = 20
     author: str = ''
         
-    @rx.var
+    @rx.var(cache=False)
     def dynamic_post_id(self) -> int :
         """_summary_
             gets and returns post ID from URL as a variable
         """        
-        return self.router.page.params.get("post_id", "")
+        return self.router.page.params.get("post_id", int())
 
-    @rx.var
-    def post_url(self):
+    @rx.var(cache=False)
+    def post_url(self)->str:
         """_summary_
             Returns a URL based on the post's ID as a variable.
         """   
