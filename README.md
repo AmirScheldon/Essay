@@ -54,6 +54,3 @@ Start the application using the following command:
 ```sh
 reflex run
 ```
-
-
-
