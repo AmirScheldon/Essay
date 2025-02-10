@@ -10,6 +10,7 @@ This project is a lightweight and efficient text-based blog website built using 
 - **Seamless Migration**: Smooth database initialization and migration processes.
 - **Fast and Lightweight**: Optimized for performance with Reflex framework.
 - **Cross-Platform Compatibility**: Works on both Windows and Linux/Mac systems.
+- **Docker Support**: Easily deploy and run the project in a containerized environment.
 
 ## Installation and Setup
 Follow the steps below to run the project on your local machine.
@@ -53,4 +54,23 @@ reflex init
 Start the application using the following command:
 ```sh
 reflex run
+```
+
+## Docker Setup
+You can also run this project inside a Docker container.
+
+### 1. Build the Docker Image
+```sh
+docker build -t text-based-blog .
+```
+
+### 2. Run the Docker Container
+```sh
+docker run -p 8000:8000 text-based-blog
+```
+
+### 3. Using Docker Compose (Optional)
+If you have a `docker-compose.yml` file, you can run the project with:
+```sh
+docker-compose up -d
 ```
