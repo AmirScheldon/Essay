@@ -19,15 +19,15 @@ class BlogPostState(SessionState):
     post_content: str = ""
     post_publish_active: bool = False
 
-    @rx.var
-    def blog_post_id(self):
+    @rx.var(cache=False)
+    def blog_post_id(self)-> str:
         """_summary_
             gets and returns post ID from URL as a variable
         """        
         return self.router.page.params.get("blog_id", "")
 
-    @rx.var
-    def blog_post_url(self):
+    @rx.var(cache=False)
+    def blog_post_url(self)->str:
         """_summary_
             creates and returns an url for a post page as a variable
         """        
@@ -35,7 +35,7 @@ class BlogPostState(SessionState):
             return f"{BLOG_POSTS_ROUTE}"
         return f"{BLOG_POSTS_ROUTE}/{self.post.id}"
 
-    @rx.var
+    @rx.var(cache=False)
     def blog_post_edit_url(self) -> str:
         """_summary_
             creates and returns an url for a edit post page as a variable
@@ -44,7 +44,7 @@ class BlogPostState(SessionState):
             return f"{BLOG_POSTS_ROUTE}"
         return f"{BLOG_POSTS_ROUTE}/{self.post.id}/edit"
     
-    @rx.var
+    @rx.var(cache=False)
     def blog_post_delete_url(self) -> str:
         """_summary_
             creates and returns an url for a delete post page as a variable
@@ -159,7 +159,7 @@ class BlogEditFormState(BlogPostState):
     form_data: dict = {}
     # post_content: str = ""
 
-    @rx.var
+    @rx.var(cache=False)
     def publish_display_date(self) -> str:
         # return "2023-12-01" # YYYY-MM-DD
         if not self.post:
@@ -168,7 +168,7 @@ class BlogEditFormState(BlogPostState):
             return datetime.now().strftime("%Y-%m-%d")
         return self.post.publish_date.strftime("%Y-%m-%d")
     
-    @rx.var
+    @rx.var(cache=False)
     def publish_display_time(self) -> str:
         if not self.post:
             return datetime.now().strftime("%H:%M:%S")

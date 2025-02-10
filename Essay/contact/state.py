@@ -13,8 +13,8 @@ class ContactState(SessionState):
     entries: List['ContactEntryModel'] = []
     did_submit: bool = False
 
-    @rx.var
-    def thank_you(self):
+    @rx.var(cache=False)
+    def thank_you(self) -> str:
         # returns a  thank_you message after the user sends a message
         first_name = self.form_data.get("first_name") or ""
         return f"Thank you {first_name}".strip() + "!"
